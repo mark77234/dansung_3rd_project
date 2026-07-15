@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7f6ef">
+  <title>오늘 입다 — 매일 다른 나를 입다</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#home" aria-label="오늘 입다 홈">오늘 <span>입다</span><i>!</i></a>
+      <button class="icon-button" id="openSettings" aria-label="내 취향 설정">⚙️</button>
+    </header>
+
+    <main>
+      <section class="page active" id="home" aria-labelledby="homeTitle">
+        <div class="greeting-row">
+          <div>
+            <p class="eyebrow" id="todayDate"></p>
+            <h1 id="homeTitle"><span id="userName">오늘</span>은<br><em>이렇게 입어볼까?</em></h1>
+          </div>
+          <div class="weather-bubble" aria-label="오늘 날씨"><b>22°</b><span>살짝 선선 ☁️</span></div>
+        </div>
+
+        <article class="daily-card" id="dailyCard">
+          <div class="tape">TODAY'S PICK</div>
+          <div class="outfit-visual" id="outfitVisual" aria-label="오늘의 추천 코디 이미지"></div>
+          <div class="daily-info">
+            <div class="tag-row" id="dailyTags"></div>
+            <h2 id="dailyTitle"></h2>
+            <p id="dailyDescription"></p>
+            <div class="daily-actions">
+              <button class="primary-button" id="saveDaily">♡ 옷장에 저장</button>
+              <button class="shuffle-button" id="shuffleDaily" aria-label="다른 코디 추천">↻</button>
+            </div>
+          </div>
+        </article>
+
+        <section class="quick-section" aria-labelledby="quickTitle">
+          <div class="section-heading"><h2 id="quickTitle">어떤 옷을 찾고 있어?</h2><span>골라봐!</span></div>
+          <div class="quick-grid">
+            <button class="quick-card peach" data-go="discover" data-focus="body"><span>🪞</span><b>체형별 추천</b><small>내 핏에 딱 맞게</small></button>
+            <button class="quick-card lavender" data-go="discover" data-focus="color"><span>🎨</span><b>퍼스널 컬러</b><small>얼굴빛은 화사하게</small></button>
+            <button class="quick-card lime" data-go="upload"><span>📸</span><b>사진으로 찾기</b><small>그 옷, 어디 제품?</small></button>
+            <button class="quick-card sky" data-go="discover" data-focus="keyword"><span>🔎</span><b>키워드 추천</b><small>#수학여행 #꾸안꾸</small></button>
+          </div>
+        </section>
+      </section>
+
+      <section class="page" id="discover" aria-labelledby="discoverTitle">
+        <p class="eyebrow">FIND MY STYLE</p>
+        <h1 id="discoverTitle">나한테 딱 맞는<br><em>스타일 찾기</em></h1>
+
+        <div class="filter-card" id="bodyFilter">
+          <label for="bodyType">나의 체형</label>
+          <select id="bodyType"><option value="all">상관없이 추천</option><option value="straight">스트레이트</option><option value="wave">웨이브</option><option value="natural">내추럴</option></select>
+        </div>
+        <div class="filter-card" id="colorFilter">
+          <span class="filter-label">퍼스널 컬러</span>
+          <div class="color-options" role="group" aria-label="퍼스널 컬러 선택">
+            <button class="color-chip active" data-color="all">전체</button><button class="color-chip" data-color="spring">🌼 봄웜</button><button class="color-chip" data-color="summer">🫧 여름쿨</button><button class="color-chip" data-color="autumn">🍂 가을웜</button><button class="color-chip" data-color="winter">❄️ 겨울쿨</button>
+          </div>
+        </div>
+        <div class="keyword-wrap" id="keywordFilter">
+          <label for="keywordInput">오늘의 키워드</label>
+          <div class="search-box"><span>⌕</span><input id="keywordInput" placeholder="예: 데이트, 꾸안꾸, 체육대회"><button id="searchKeyword">찾기</button></div>
+          <div class="suggestions"><button>#학교</button><button>#주말</button><button>#데이트</button><button>#힙한</button><button>#편한</button></div>
+        </div>
+
+        <div class="result-heading"><h2>추천 코디 <span id="resultCount"></span></h2><button id="resetFilters">초기화</button></div>
+        <div class="outfit-grid" id="outfitGrid"></div>
+      </section>
+
+      <section class="page" id="upload" aria-labelledby="uploadTitle">
+        <p class="eyebrow">SNAP & FIND</p>
+        <h1 id="uploadTitle">마음에 든 옷,<br><em>사진으로 찾아봐!</em></h1>
+        <p class="intro-copy">사진을 올리면 비슷한 상품과 판매처를 알려줄게.</p>
+        <label class="upload-zone" id="uploadZone" for="photoInput">
+          <input type="file" id="photoInput" accept="image/*">
+          <div class="upload-placeholder" id="uploadPlaceholder"><span>📷</span><b>사진 올리기</b><small>JPG, PNG · 최대 10MB</small></div>
+          <img id="photoPreview" alt="업로드한 옷 사진 미리보기">
+        </label>
+        <div class="photo-actions">
+          <label for="cameraInput">📷 카메라로 찍기</label>
+          <input type="file" id="cameraInput" accept="image/*" capture="environment">
+          <label for="photoInput">🖼️ 앨범에서 고르기</label>
+        </div>
+        <button class="primary-button full" id="analyzePhoto" disabled>이 옷 찾아보기 ✨</button>
+        <div class="analysis-loading" id="analysisLoading"><span></span><p>옷의 특징을 살펴보는 중...</p></div>
+        <section class="analysis-result" id="analysisResult">
+          <div class="section-heading"><h2>이 옷을 찾았어!</h2><span>AI 매칭</span></div>
+          <div class="tone-result"><div class="tone-swatch" id="toneSwatch"></div><div><small>사진 속 대표 색상 분석</small><h3 id="toneName"></h3><p id="toneAdvice"></p></div></div>
+          <h3 class="sub-title">비슷한 옷 & 코디</h3>
+          <div id="similarProducts"></div>
+          <p class="notice">※ 대표 색상은 사진 픽셀을 기기 안에서 분석합니다. 얼굴 퍼스널 컬러의 정확한 진단에는 전문가 또는 전용 AI API가 필요해요.</p>
+        </section>
+      </section>
+
+      <section class="page" id="saved" aria-labelledby="savedTitle">
+        <p class="eyebrow">MY CLOSET</p>
+        <h1 id="savedTitle">내가 찜한<br><em>코디 모아보기</em></h1>
+        <div class="outfit-grid" id="savedGrid"></div>
+        <div class="empty-state" id="emptySaved"><span>🧺</span><h2>아직 옷장이 비어 있어</h2><p>마음에 드는 코디의 하트를 눌러봐!</p><button class="primary-button" data-go="discover">코디 구경하기</button></div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="주요 메뉴">
+      <a class="active" href="#home" data-page="home"><span>⌂</span><b>홈</b></a>
+      <a href="#discover" data-page="discover"><span>⌕</span><b>스타일 찾기</b></a>
+      <a class="camera-nav" href="#upload" data-page="upload"><span>＋</span><b>사진 검색</b></a>
+      <a href="#saved" data-page="saved"><span>♡</span><b>내 옷장</b></a>
+    </nav>
+  </div>
+
+  <dialog id="settingsDialog">
+    <form method="dialog" id="settingsForm">
+      <div class="dialog-head"><div><small>MY PROFILE</small><h2>내 취향 설정</h2></div><button value="cancel" aria-label="닫기">×</button></div>
+      <label>이름 또는 별명<input id="nameInput" maxlength="8" placeholder="예: 민지"></label>
+      <label>체형<select id="settingBody"><option value="all">잘 모르겠어요</option><option value="straight">스트레이트</option><option value="wave">웨이브</option><option value="natural">내추럴</option></select></label>
+      <label>퍼스널 컬러<select id="settingColor"><option value="all">잘 모르겠어요</option><option value="spring">봄 웜톤</option><option value="summer">여름 쿨톤</option><option value="autumn">가을 웜톤</option><option value="winter">겨울 쿨톤</option></select></label>
+      <button class="primary-button full" value="default" id="saveSettings">저장하기</button>
+    </form>
+  </dialog>
+
+  <div class="sheet-backdrop" id="sheetBackdrop"></div>
+  <aside class="outfit-sheet" id="outfitSheet" aria-label="착장 상세" aria-hidden="true">
+    <div class="sheet-handle"></div>
+    <button class="sheet-close" id="closeSheet" aria-label="닫기">×</button>
+    <div class="sheet-visual" id="sheetVisual"></div>
+    <div class="sheet-content">
+      <div class="tag-row" id="sheetTags"></div><h2 id="sheetTitle"></h2><p id="sheetDesc"></p>
+      <div class="item-list" id="sheetItems"></div>
+      <div class="sheet-buttons"><button class="primary-button" id="sheetSave">♡ 저장</button><a id="sheetShop" href="#" target="_blank" rel="noopener">비슷한 상품 보기 ↗</a></div>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast" role="status"></div>
+  <script src="script.js"></script>
+</body>
+</html>
