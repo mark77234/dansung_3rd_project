@@ -107,3 +107,13 @@ dialog form { padding:22px; }.dialog-head { display:flex; justify-content:space-
 @media (min-width:760px) { .app-shell { margin:24px auto; min-height:calc(100vh - 48px); border:2px solid var(--ink); border-radius:28px; } .bottom-nav { bottom:24px; border:2px solid var(--ink); border-radius:0 0 26px 26px; } }
 @media (max-width:380px) { main { padding-left:14px; padding-right:14px; } h1 { font-size:34px; }.outfit-visual { height:235px; }.quick-card { min-height:130px; padding:12px; }.style-thumb { height:150px; } }
 @media (prefers-reduced-motion:reduce) { * { scroll-behavior:auto!important; animation:none!important; transition:none!important; } }
+
+/* 실사 코디 이미지 */
+.outfit-visual { background-size:cover; background-position:center 32%; }
+.outfit-visual::before { inset:0; width:auto; height:auto; top:0; left:0; transform:none; border:0; border-radius:0; clip-path:none; box-shadow:none; background:linear-gradient(to top,#0004,transparent 45%); }
+.style-thumb.photo { background-size:cover; background-position:center 28%; }
+.style-thumb.photo::before { display:none; }
+.product-thumb.real-photo { background-size:cover; background-position:center; }
+.product-card a.second-shop { display:block; color:var(--coral); margin-top:5px; }
+.sheet-visual.photo { height:230px; background-size:cover; background-position:center 30%; }
+.sheet-visual.photo::before { display:none; }

@@ -22,6 +22,20 @@ const outfits = [
   { id:20, title:'겨울 붕어빵 룩', desc:'레드 머플러 + 더플 코트', body:'straight', color:'autumn', tags:['#겨울','#따뜻한','#데이트'], top:'#a77854', bottom:'#4b4039', bg:'#ead9c8', icon:'🧣' }
 ];
 
+// 공개 패션 사진과 착장별 액세서리 정보
+const fashionPhotos = [
+  'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=700&q=82',
+  'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=700&q=82',
+  'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=700&q=82',
+  'https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?auto=format&fit=crop&w=700&q=82',
+  'https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=700&q=82'
+];
+const accessorySets = [
+  ['실버 헤드폰','캔버스 백팩'], ['미니 숄더백','하트 목걸이'], ['실버 링 귀걸이','블랙 로퍼'],
+  ['비니','메신저백'], ['볼캡','컬러 스니커즈'], ['안경','레더 시계'], ['니트 머플러','에코백'], ['헤어 집게핀','미니백']
+];
+outfits.forEach((item,index) => { item.image=fashionPhotos[index % fashionPhotos.length]; item.accessories=accessorySets[index % accessorySets.length]; });
+
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 let favorites = JSON.parse(localStorage.getItem('todayWearFavorites') || '[]');
@@ -37,9 +51,7 @@ function toast(message) {
 // 날짜에 맞춰 오늘의 코디를 표시한다.
 function renderDaily() {
   const item = outfits[dailyIndex];
-  $('#outfitVisual').style.setProperty('--top', item.top);
-  $('#outfitVisual').style.setProperty('--bottom', item.bottom);
-  $('#outfitVisual').style.backgroundColor = item.bg;
+  $('#outfitVisual').style.backgroundImage = `linear-gradient(to top, rgba(0,0,0,.28), transparent 55%), url('${item.image}')`;
   $('#outfitVisual').dataset.icon = item.icon;
   $('#dailyTitle').textContent = item.title;
   $('#dailyDescription').textContent = item.desc;
@@ -52,7 +64,7 @@ function renderDaily() {
 function cardTemplate(item) {
   const saved = favorites.includes(item.id);
   return `<article class="style-card" data-outfit="${item.id}" tabindex="0" role="button" aria-label="${item.title} 착장 상세 보기">
-    <div class="style-thumb" style="--bg:${item.bg};--top:${item.top};--bottom:${item.bottom}">
+    <div class="style-thumb photo" style="--bg:${item.bg};background-image:url('${item.image}')">
       <button class="heart ${saved ? 'saved' : ''}" data-favorite="${item.id}" aria-label="${item.title} ${saved ? '저장 취소' : '저장'}">${saved ? '♥' : '♡'}</button>
     </div>
     <div class="style-info"><small>${item.tags[0]}</small><h3>${item.title}</h3><p>${item.desc}</p></div>
@@ -83,11 +95,12 @@ function toggleFavorite(id) {
 // 코디를 누르면 상품별 링크가 있는 하단 착장 박스를 연다.
 function openOutfitSheet(id) {
   const item = outfits.find(outfit => outfit.id === id); if (!item) return;
-  $('#sheetVisual').style.cssText = `--bg:${item.bg};--top:${item.top};--bottom:${item.bottom}`;
+  $('#sheetVisual').classList.add('photo'); $('#sheetVisual').style.cssText = `--bg:${item.bg};background-image:url('${item.image}')`;
   $('#sheetTags').innerHTML = item.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
   $('#sheetTitle').textContent = item.title; $('#sheetDesc').textContent = item.desc;
   const parts = item.desc.split(' + ');
-  $('#sheetItems').innerHTML = parts.map((part, index) => `<div><span>${index ? 'BOTTOM' : 'TOP'} · ${part}</span><a href="https://www.musinsa.com/search/musinsa/integration?q=${encodeURIComponent(part)}" target="_blank" rel="noopener">찾기 ↗</a></div>`).join('');
+  const allItems = [...parts.map((name,index)=>({type:index ? 'BOTTOM':'TOP',name})), ...item.accessories.map(name=>({type:'ACC',name}))];
+  $('#sheetItems').innerHTML = allItems.map(part => `<div><span>${part.type} · ${part.name}</span><a href="https://search.shopping.naver.com/search/all?query=${encodeURIComponent(part.name)}" target="_blank" rel="noopener">실제 상품 ↗</a></div>`).join('');
   $('#sheetShop').href = `https://www.musinsa.com/search/musinsa/integration?q=${encodeURIComponent(item.title)}`;
   $('#sheetSave').dataset.id = item.id; $('#sheetSave').textContent = favorites.includes(item.id) ? '♥ 저장됨' : '♡ 저장';
   $('#outfitSheet').classList.add('show'); $('#sheetBackdrop').classList.add('show'); $('#outfitSheet').setAttribute('aria-hidden','false');
@@ -152,7 +165,8 @@ function analyzeUploadedPhoto() {
   const advice={spring:'아이보리·코랄·연두처럼 맑고 따뜻한 색과 잘 어울려요.',summer:'소프트 블루·라벤더·회색처럼 차분한 색을 매치해 봐요.',autumn:'카키·브라운·베이지처럼 깊고 따뜻한 색이 조화로워요.',winter:'블랙·화이트·선명한 블루처럼 대비가 강한 색이 좋아요.'};
   $('#toneSwatch').style.background=`rgb(${r},${g},${b})`; $('#toneName').textContent=`${names[tone]} 계열 추천`; $('#toneAdvice').textContent=advice[tone];
   const similar=outfits.filter(item=>item.color===tone).slice(0,3);
-  $('#similarProducts').innerHTML=similar.map((item,index)=>`<article class="product-card" data-outfit="${item.id}" role="button" tabindex="0"><div class="product-thumb" style="background:${item.bg}">${item.icon}</div><div><small>${94-index*3}% 비슷한 분위기</small><h3>${item.title}</h3><p>${item.desc}</p><a href="https://www.musinsa.com/search/musinsa/integration?q=${encodeURIComponent(item.desc)}" target="_blank" rel="noopener">판매 사이트에서 찾기 →</a></div></article>`).join('');
+  const toneKeywords={spring:'봄웜 코랄 아이보리 학생 코디',summer:'여름쿨 라벤더 소프트블루 학생 코디',autumn:'가을웜 브라운 카키 학생 코디',winter:'겨울쿨 블랙 블루 학생 코디'};
+  $('#similarProducts').innerHTML=similar.map((item,index)=>`<article class="product-card" data-outfit="${item.id}" role="button" tabindex="0"><div class="product-thumb real-photo" style="background-image:url('${item.image}')"></div><div><small>${94-index*3}% 비슷한 분위기</small><h3>${item.title}</h3><p>${item.desc} · ${item.accessories[0]}</p><a href="https://search.shopping.naver.com/search/all?query=${encodeURIComponent(toneKeywords[tone]+' '+item.desc)}" target="_blank" rel="noopener">네이버쇼핑 실시간 검색 →</a><a class="second-shop" href="https://www.musinsa.com/search/musinsa/integration?q=${encodeURIComponent(item.desc)}" target="_blank" rel="noopener">무신사에서 찾기 →</a></div></article>`).join('');
 }
 $('#analyzePhoto').addEventListener('click', () => { $('#analysisLoading').classList.add('show'); $('#analysisResult').classList.remove('show'); $('#analyzePhoto').disabled = true; setTimeout(() => { analyzeUploadedPhoto(); $('#analysisLoading').classList.remove('show'); $('#analysisResult').classList.add('show'); $('#analyzePhoto').disabled = false; $('#analysisResult').scrollIntoView({ behavior:'smooth' }); }, 1000); });
 
