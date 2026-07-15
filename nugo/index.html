@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#7557ff">
+  <meta name="description" content="누르고, 두드리고, 늘리며 스트레스를 날리는 ASMR 놀이터 왁뿌">
+  <title>왁뿌 — 손끝으로 푸는 스트레스</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+
+  <main class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="왁뿌 홈">
+        <span class="brand-mark" aria-hidden="true">W!</span>
+        <span>왁뿌</span>
+      </a>
+      <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="true">
+        <span aria-hidden="true">♬</span><span id="soundLabel">사운드 ON</span>
+      </button>
+    </header>
+
+    <section class="hero" aria-labelledby="heroTitle">
+      <div>
+        <p class="eyebrow"><span></span> 오늘도 고생했어!</p>
+        <h1 id="heroTitle">스트레스,<br><em>손끝으로 왁뿌!</em></h1>
+        <p class="hero-copy">누르고, 두드리고, 늘리면서<br>머릿속을 가볍게 비워봐.</p>
+      </div>
+      <div class="mood-orbit" aria-hidden="true">
+        <div class="mood-face"><span></span><span></span><i></i></div>
+        <b>POP!</b>
+      </div>
+    </section>
+
+    <section class="stats" aria-label="나의 왁뿌 기록">
+      <div><span>오늘의 왁뿌</span><strong id="todayCount">0</strong><small>번</small></div>
+      <div class="stat-divider"></div>
+      <div><span>최고 기록</span><strong id="bestCount">0</strong><small>번</small></div>
+      <button id="resetStats" type="button" aria-label="기록 초기화">↻</button>
+    </section>
+
+    <section class="play-section" aria-labelledby="playTitle">
+      <div class="section-heading">
+        <div><span class="step">STEP 01</span><h2 id="playTitle">오늘은 뭘 만져볼까?</h2></div>
+        <p>취향대로 골라봐</p>
+      </div>
+
+      <div class="toy-grid">
+        <button class="toy-card selected" type="button" data-toy="bubble" aria-pressed="true">
+          <span class="toy-art bubble-art" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+          <span class="toy-copy"><strong>뽁뽁이</strong><small>톡톡! 무한 터뜨리기</small></span>
+          <span class="arrow" aria-hidden="true">↗</span>
+        </button>
+        <button class="toy-card" type="button" data-toy="keycap" aria-pressed="false">
+          <span class="toy-art keycap-art" aria-hidden="true"><i>W</i><i>A</i><i>K</i></span>
+          <span class="toy-copy"><strong>키캡</strong><small>찰칵찰칵 타건하기</small></span>
+          <span class="arrow" aria-hidden="true">↗</span>
+        </button>
+        <button class="toy-card" type="button" data-toy="ball" aria-pressed="false">
+          <span class="toy-art ball-art" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="toy-copy"><strong>왁뿌볼</strong><small>말랑말랑 꾹 누르기</small></span>
+          <span class="arrow" aria-hidden="true">↗</span>
+        </button>
+        <button class="toy-card" type="button" data-toy="slime" aria-pressed="false">
+          <span class="toy-art slime-art" aria-hidden="true"><i></i><i></i></span>
+          <span class="toy-copy"><strong>슬라임</strong><small>쭈욱 늘리고 휘젓기</small></span>
+          <span class="arrow" aria-hidden="true">↗</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="studio" aria-labelledby="studioTitle">
+      <div class="studio-head">
+        <div><span class="live-dot"></span><span>PLAY ZONE</span><h2 id="studioTitle">뽁뽁이 타임</h2></div>
+        <button id="refreshToy" type="button"><span aria-hidden="true">↻</span> 새로 채우기</button>
+      </div>
+      <p class="instruction" id="instruction">동그라미를 마음껏 터뜨려 봐!</p>
+      <div class="play-zone" id="playZone" aria-live="polite"></div>
+      <div class="combo" id="combo" aria-live="polite">NICE! <b>+1</b></div>
+    </section>
+
+    <footer><span>WAKPPU ASMR LAB</span><p>오늘의 스트레스는 여기 두고 가기 <i>♥</i></p></footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
